@@ -10,7 +10,7 @@ public class MemberDto {
 	private String memberGender;
 	private String hp;
 	private String email;
-	private String regidence;
+	private String residence;
 	
 	public String getMemberId() {
 		return memberId;
@@ -42,17 +42,17 @@ public class MemberDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getRegidence() {
-		return regidence;
+	public String getResidence() {
+		return residence;
 	}
-	public void setRegidence(String regidence) {
-		this.regidence = regidence;
+	public void setResidence(String residence) {
+		this.residence = residence;
 	}
 	
 	@Override
 	public String toString() {
 		return "MemberDto [memberId=" + memberId + ", memberName=" + memberName + ", memberGender=" + memberGender
-				+ ", hp=" + hp + ", email=" + email + ", regidence=" + regidence + "]";
+				+ ", hp=" + hp + ", email=" + email + ", residence=" + residence + "]";
 	}
 	
 	
