@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,8 +75,8 @@ public class ViewToController {
 	 */
 	
 	@RequestMapping(value="/transfer2" , method=RequestMethod.POST)
-	// public String transfer2(@ModelAttribute MemberDto memberDto) { // Dto의 이름과 jsp의 name값이 같아야 연결되어 데이터가 넘어감
-	public String transfer2(MemberDto memberDto) { // @ModelAttribute 생략해도 가능 
+	public String transfer2(@ModelAttribute MemberDto memberDto) { // Dto의 이름과 jsp의 name값이 같아야 연결되어 데이터가 넘어감
+	// public String transfer2(MemberDto memberDto) { // @ModelAttribute 생략해도 가능 
 		
 		System.out.println("\n transfer2 \n");  // 확인용 
 		System.out.println(memberDto);
@@ -85,7 +86,7 @@ public class ViewToController {
 
 
 	/* 
-	 * 예시 3) @RequestParam Map<K,V>
+	 * 예시 3) @RequestParam Map<K,V> (한번에 가져올 때 사용한다. + 연결되지 않는 것까지 가져온다.)
 	 * 
 	 * - Map 컬렉션 프레임워크를 이용하여 요청파라미터에 접근이 가능하다.
 	 * 
@@ -100,7 +101,7 @@ public class ViewToController {
 	 */
 	
 	@RequestMapping(value="/transfer3" , method=RequestMethod.POST) 
-	public String transfer3(@RequestParam Map<String, Object> memberMap) { // name이 연결되지 않는 것들까지 가져온다.
+	public String transfer3(@RequestParam Map<String, Object> memberMap) { 
 		
 		System.out.println("\n transfer3 \n");
 		System.out.println(memberMap);
@@ -110,7 +111,7 @@ public class ViewToController {
 
 	/* 
 	 * 
-	 *	예시 4) @RequestParam
+	 *	예시 4) @RequestParam (낱개로 데이터를 가져오고 싶을 때 사용) 자주 사용
 	 *
 	 *	- @RequestParam어노테이션을 사용하여 파라메타의 개별적인 값에 접근 할 수 있다. 
 	 *	 
@@ -120,21 +121,53 @@ public class ViewToController {
 	 *		defaultValue : 요청 파라메타의 값이 없을때 사용할 값을 지정한다.
 	 *	
 	 *	- @RequestParam을 생략하여 parameter에 직접 요청파라메타의 name값만 입력하여 데이터를 전달받을 수 있다.
-	 *
+	 *	- 형변환이 쉽다.
 	 */
+	@RequestMapping(value="/transfer4" , method=RequestMethod.POST)		//초기값 세팅할 경우 name="memberName" 작성하여 틀을 맞춰준다.				
+	public String transfer4(@RequestParam(name="memberName" , defaultValue="anonymous") String memberName, @RequestParam(name="residence" , defaultValue="서울") String residence) {
+	// public String transfer4(String memberName, String residence) { // @RequestParam() 생략 가능 > name만 일치하게 작성하면 된다.
+								// int를 받고싶을 경우 int로 작성해줄 수 있다.
+		
+		System.out.println("\n transfer4 \n");
+		System.out.println("memberName : " + memberName);
+		System.out.println("residence : " + residence);
+		
+		return "home";
+	}	
 
 	/*
 	 *  
-	 *  예시 5) @PathVariable
+	 *  예시 5) @PathVariable 
 	 *   
 	 *  - Spring을 사용하다보면 클라이언트에서 URL에 파라메타를 같이 전달하는 경우가 생긴다.
 	 *	- 아래와 같이 두 가지 형식으로 url이동과 함께 파라메타값들을 전달할 수 있다.
 	 *
-	 *		1) http://localhost:8080/mvc/viewToController/transfer5?isMember='yes'&isSession='no'
-	 *		2) http://localhost:8080/mvc/viewToController/transfer5/yes/no
+	 *		1) http://localhost:8080/mvc/viewToController/transfer5?isMember='yes'&isSession='no'  > 주로 사용
+	 *		2) http://localhost:8080/mvc/viewToController/transfer5/yes/no						   > 기업에서 최근 사용 
 	 *	
 	 *	- 1) 방법은 @RequestParam을 통해서 데이터에 접근하고 , 2) 방법은 @PathVariable을 통해서 데이터에 접근한다.
 	 *  - 2) 방법은 {}로 패턴을 매칭하여 데이터에 접근 한다. 
 	 *  
 	 * */
+	@RequestMapping(value="/transfer5" , method=RequestMethod.GET) // 링크로 연결되는 것은 GET
+	public String transfer5(String isMember , String isSession) { 
+		
+		System.out.println("\n transfer5 \n");
+		System.out.println("isMember : " + isMember);
+		System.out.println("isSession : " + isSession);
+		
+		return "home";
+	}
+	
+										// 길 = 변수
+	@RequestMapping(value="/transfer6/{isMember}/{isSession}" , method=RequestMethod.GET) 
+	public String transfer6(@PathVariable String isMember , @PathVariable String isSession) { 
+		
+		System.out.println("\n transfer6 \n");
+		System.out.println("isMember : " + isMember);
+		System.out.println("isSession : " + isSession);
+		
+		return "home";
+	}
+	
 }

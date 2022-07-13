@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<form action="transfer3" method="post"> 
+	<form action="transfer4" method="post"> 
 		<input type="hidden" name="url1" value="transfer1">
 		<input type="hidden" name="url2" value="transfer2">
 		<input type="hidden" name="url3" value="transfer3">
@@ -30,8 +30,8 @@
 		</fieldset>	
      </form>
      
-    <p>이미 회원가입이 되어있으면 <a href="">로그인(param)으로 이동하기</a></p>
-    <p>이미 회원가입이 되어있으면 <a href="">로그인(path variable)으로 이동하기</a></p>
+    <p>이미 회원가입이 되어있으면 <a href="transfer5?isMember=yes&isSession=no">로그인(param)으로 이동하기</a></p>
+    <p>이미 회원가입이 되어있으면 <a href="transfer6/yes/no">로그인(path variable)으로 이동하기</a></p>
 
 </body>
 </html>
