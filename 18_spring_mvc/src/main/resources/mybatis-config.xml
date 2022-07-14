@@ -2,5 +2,10 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">	
 
 <configuration>
+	
+	<!-- Camel Case, Snake Case로 설계된 경우 Mybatis Mapper에서 resultMap을 사용하지 않아도 자바변수와 컬럼명을 매치해준다. -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
 
 </configuration>
