@@ -22,7 +22,7 @@
 							id = modifyMember > member.modifyMember
 
 	* resultType속성 : 반환되는 데이터의 타입을 명시하며 반환데이터가 있는 select쿼리문에서 사용한다.
-						int , String , Map , ~dto
+						int , String , Map(hashmap) , ~dto
 					   
 					   dto타입은 mybatis-config.xml파일에서 alias(별칭)지정을 하여 간략하게 사용할 수 있다.
 						
@@ -63,8 +63,151 @@
 		
 	</select>
 	
-	<select id="select3"></select>
-	<select id="select4"></select>
-	<select id="select5"></select>
+	<!-- 
+
+		# Table의 Colume을 자바로 매핑하는 방법 
+	
+		- POJO의 변수명과 Table의 컬럼명이 일치할경우는 ( 두단어가 이어지는 경우가 없을때 ) 
+		  스프링 프레임워크에서 테이블명과 POJO의 변수를 연결하여 준다.
+		  
+		- 일반적으로 POJO의 변수는 CamelCase를 사용하고 테이블의 변수는 SnakeCase 사용하여 
+		  두 값이 일치하지 않는 경우는 추가적으로 연결하는 코드를 추가적으로 구현하여야 한다. 
+	
+			[ 예시 ]
+			
+			   [POJO]	   	   [Table Colume]
+			productCode	  <>	PRODUCT_CODE
+			productName	  <>    PRODUCT_NAME
+	
+		- 연결방법
+			
+			예시 1) mybatis-config파일에 _를 camelcase로 매핑하는 설정을 추가한다.(join의 경우 한계점이 있다. / 연산할 경우 한계점이 있다.)
+		
+				<settings>
+					<setting name="mapUnderscoreToCamelCase" value="true"/>
+				</settings>
+	
+	
+			예시 2) resultMap태그를 추가로 작성한다.
+		
+				<resultMap id="getProduct" type="000.000.000.Product">  		<< 식별id	, POJO클래스 전체 경로
+		       		<result property="productCode" column="PRODUCT_CODE"/>		<< 변수값   , 컬럼명(AS값을 쓴다.)
+		       		<result property="productName" column="PRODUCT_NAME"/>
+		    	</resultMap>
+		    	
+		    	<select id = ""  resultType="getProduct">						<< 식별id , resultMap의 id
+		    		SELECT
+						PRODUCT_CODE
+						PRODUCT_NAME
+					FROM
+						PRODUCT		
+		    	</select>
+		
+				> resultType은 resultMap의 id와 매핑된다.
+			
+		
+			예시 3) 쿼리문에서 as키워드를 작성하여 pojo의 colume과 연결하거나 맵의 key값으로 매핑한다. > 사후관리가 어려움.
+			
+				<select id = "" >
+					SELECT
+						PRODUCT_CODE  AS productCode
+						PRODUCT_NAME  AS productName
+						PRODUCT_PRICE    productPrice    < AS 키워드는 생략가능하다.
+					FROM
+						PRODUCT		
+				</select>
+	
+	 -->
+	
+	<select id="select3" resultType="hashmap"> 
+		SELECT
+				PRODUCT_CODE			AS productCode,
+				PRODUCT_NAME			AS productName,
+				PRODUCT_PRICE			AS productPrice,
+				PRODUCT_DELIVERY_PRICE	AS productDeliveryPrice
+		FROM
+				T_PRODUCT
+		
+	
+	</select>
+	
+	<resultMap type="hashmap" id="productInfo">
+		<result column="PRODUCT_CODE" 			property="productCode"/>
+		<result column="PRODUCT_NAME" 			property="productName"/>
+		<result column="PRODUCT_PRICE" 			property="productPrice"/>
+		<result column="PRODUCT_DELIVERY_PRICE" property="productDeliveryPrice"/>
+	</resultMap>
+	
+	<select id="select4" resultMap="productInfo">
+		SELECT 
+				PRODUCT_CODE,
+				PRODUCT_NAME,
+				PRODUCT_PRICE,
+				PRODUCT_DELIVERY_PRICE
+		FROM
+				T_PRODUCT
+	</select>
+	
+	<resultMap type="hashmap" id="productMoreInfo">
+		<result column="PRODUCT_CODE" 		property="productCode"/>
+		<result column="PRODUCT_NAME" 		property="productName"/>
+		<result column="PRODUCT_PRICE" 		property="productPrice"/>
+		<result column="VALUE_ADDED_TAX"	property="valueAddedTax"/>
+		<result column="ADD_TAX_PRICE" 		property="addTaxPrice"/>
+		<result column="MEMBER_NAME"		property="memberName"/>
+		<result column="RESIDENCE" 			property="residence"/>
+	</resultMap>
+	
+	<select id="select5" resultMap="productMoreInfo"> 
+	SELECT 
+			P.PRODUCT_CODE 								AS PRODUCT_CODE,
+	        P.PRODUCT_NAME								AS PRODUCT_NAME, 
+	        P.PRODUCT_PRICE								AS PRODUCT_PRICE,
+	        P.PRODUCT_PRICE * 0.1						AS VALUE_ADDED_TAX,
+	        P.PRODUCT_PRICE + P.PRODUCT_PRICE * 0.1		AS ADD_TAX_PRICE, 
+	        M.MEMBER_NAME								AS MEMBER_NAME,
+	        M.RESIDENCE									AS RESIDENCE
+	FROM
+			T_PRODUCT P
+ 	 	 JOIN T_ORDER O
+				   ON P.PRODUCT_CODE = O.PRODUCT_CODE
+	  	JOIN T_MEMBER M
+				   ON M.MEMBER_ID = O.MEMBER_ID
+	
+	</select>
+	
+	<!-- 		
+		
+	  	# Dao에서 mapper로 파라메타 전달 
+	  	
+		- 전달 받은 데이터를 쿼리문에서 ${변수}  , #{변수}과 같은 형태로 사용된다.
+		- 주로 #{값} 형태(preparedStatement)를 사용하며 이 형태를 권장한다.
+		- 대소문자가 구분되므로 오타에 주의한다. ****
+		- Dao에서 전송된 데이터를 가져와서 작성한다.
+		- parameterType은 생략가능하지만 작성하는 것을 권장한다.(유지보수를 위해)
+		
+	-->
+							<!-- parameterType : 들어오는 데이터의 타입 /  resultType = 나가는 데이터의 타입 -->
+	<select id="memberInfo" parameterType="String" resultType="com.spring.mvc.dataTransfer.dto.MemberDto">
+		SELECT
+				*
+		FROM
+				T_MEMBER
+		WHERE 
+				MEMBER_ID = #{memberId} <!-- pstmt.setString을 사용하지 않아도 됨 -->
+	</select>
+	
+	<insert id="addProduct" parameterType="com.spring.mvc.dataTransfer.dto.ProductDto">
+		INSERT INTO
+				T_PRODUCT
+		VALUES (
+				#{productCode},
+				#{productName},
+				#{productPrice},
+				#{productDeliveryPrice}
+		)
+				
+	</insert>
+	
 	
 </mapper>
