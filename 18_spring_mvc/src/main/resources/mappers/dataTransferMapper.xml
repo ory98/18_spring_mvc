@@ -209,5 +209,39 @@
 				
 	</insert>
 	
+	<!-- 들어오는 값이 두개 이며, 서로 같은 Dto에 있을 경우 Dto를 사용 -->
+	<select id="searchData1" parameterType="hashmap" resultType="com.spring.mvc.dataTransfer.dto.OrderDto">
+		
+		<![CDATA[
+			SELECT 
+					*
+			FROM	
+					T_ORDER
+			WHERE 
+					ORDER_GOODS_QTY < #{orderGoodsQty} AND 
+					DELIVERY_STATE != #{deliveryState}
+		]]>
 	
+	</select>
+	
+	<!-- 들어오는 값이 두개 이며, 서로 다른 Dto에 있을 경우 map을 사용 -->
+	<select id="searchData2" parameterType="hashmap" resultType="hashmap">
+		SELECT
+				*
+		FROM
+				T_ORDER O
+		 JOIN T_PRODUCT P
+					 ON O.DELIVERY_STATE = #{deliveryState} 
+					AND P.PRODUCT_DELIVERY_PRICE = #{productDeliveryPrice}	
+	</select>
+	
+	<!-- 나가는 값이 한개이므로 int, 들어오는 값이 2개 이상이며, 어느 Dto에 없으므로 map을 사용 -->
+	<select id="searchData3" parameterType="hashmap" resultType="int">
+		SELECT 
+				SUM(ORDER_GOODS_QTY)
+		FROM
+				T_ORDER
+		WHERE 
+				ORDER_DATE BETWEEN #{startDate} AND #{endDate}
+	</select>
 </mapper>
