@@ -50,7 +50,7 @@
 		
 	-->
 	
-	<select id="select2" resultType="com.spring.mvc.dataTransfer.dto.ProductDto">
+	<select id="select2" resultType="ProductDto">
 		
 		<![CDATA[ 
 		SELECT
@@ -188,7 +188,7 @@
 		
 	-->
 							<!-- parameterType : 들어오는 데이터의 타입 /  resultType = 나가는 데이터의 타입 -->
-	<select id="memberInfo" parameterType="String" resultType="com.spring.mvc.dataTransfer.dto.MemberDto">
+	<select id="memberInfo" parameterType="String" resultType="MemberDto">
 		SELECT
 				*
 		FROM
@@ -197,7 +197,7 @@
 				MEMBER_ID = #{memberId} <!-- pstmt.setString을 사용하지 않아도 됨 -->
 	</select>
 	
-	<insert id="addProduct" parameterType="com.spring.mvc.dataTransfer.dto.ProductDto">
+	<insert id="addProduct" parameterType="ProductDto">
 		INSERT INTO
 				T_PRODUCT
 		VALUES (
@@ -210,7 +210,7 @@
 	</insert>
 	
 	<!-- 들어오는 값이 두개 이며, 서로 같은 Dto에 있을 경우 Dto를 사용 -->
-	<select id="searchData1" parameterType="hashmap" resultType="com.spring.mvc.dataTransfer.dto.OrderDto">
+	<select id="searchData1" parameterType="hashmap" resultType="OrderDto">
 		
 		<![CDATA[
 			SELECT 

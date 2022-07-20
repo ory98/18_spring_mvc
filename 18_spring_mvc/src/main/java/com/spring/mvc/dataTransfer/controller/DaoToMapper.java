@@ -13,6 +13,7 @@ import com.spring.mvc.dataTransfer.dto.ProductDto;
 
 // 2번으로 만든다.
 @Controller
+@RequestMapping(value="/daoToMapper")
 public class DaoToMapper { // IoC : 제어의 역행, 제어의 역전 > @를 사용하여 스프링이 관리자가 된다. > 일체형 배터리와 조립형 배터리의 차이가 이유다.
 	
 	// private DataTransferDao temp = new DataTransferDao();

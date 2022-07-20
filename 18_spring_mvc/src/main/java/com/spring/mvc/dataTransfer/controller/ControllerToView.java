@@ -28,6 +28,7 @@ import com.spring.mvc.dataTransfer.dto.MemberDto;
  * */
 
 @Controller		// @Controller를 작성하여 해당 클래스가 Controller임을 스프링 bean에 등록한다.(선언한다)
+@RequestMapping(value="/controllerToView") // 중복되는 경로는 클래스 위에 작성하여 중복경로를 줄일 수 있다. (중간경로) /controllerToView/modelEx
 public class ControllerToView {
 	
 	/*
@@ -150,13 +151,16 @@ public class ControllerToView {
 	
 	//간단한 jsp를 java에서 처리해서 화면으로 보내줌 
 	@RequestMapping(value="/responseBodyEx" , method=RequestMethod.GET)
-	public @ResponseBody String responseBodyEx() { // @ResponseBody이 붙으면 html로 화면에 나감 		
+	public @ResponseBody String responseBodyEx(HttpServletRequest request) { // @ResponseBody이 붙으면 html로 화면에 나감 		
 		
 		// String data = "<h1> BoardMain </h1>"; 
 		
+		//HttpServletRequest request > request.getContextPath(); 메서드를 통하여 절대 경로 접근 경로를 가져온다.
+		request.getContextPath();
+		
 		String data = "<script>";
 			   data += "alert('로그인 성공');";
-			   data += "location.href='modelEx';";
+			   data += "location.href='" + request.getContextPath() + "/controllerToView/modelEx';"; 
 			   data += "</script>";
 		
 		return data; // 새로운 html파일이 나타남 
@@ -216,11 +220,11 @@ public class ControllerToView {
 class RestControllerEx {
 	
 	@RequestMapping(value="/restControllerEx" , method=RequestMethod.GET)
-	public String responseBodyEx() { 
+	public String responseBodyEx(HttpServletRequest request) { 
 		
 		String data = "<script>";
 			   data += "alert('success login');";
-			   data += "location.href='modelEx';";
+			   data += "location.href='"+ request.getContextPath() + "/controllerToView/modelEx';";
 			   data += "</script>";
 		
 		return data; 

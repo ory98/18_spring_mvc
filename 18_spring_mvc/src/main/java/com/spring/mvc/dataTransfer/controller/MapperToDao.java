@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.spring.mvc.dataTransfer.dao.DataTransferDao;
 
 @Controller
+@RequestMapping(value="/mapperToDao")
 public class MapperToDao { // 홈페이지로 보여주기 위해 만드는 DAO 
 	
 	// private DataTransferDao dataTransferDaoTemp = new DataTransferDao(); > 기존방식의 new
