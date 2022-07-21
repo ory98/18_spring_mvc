@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dynamicQuery">
+	
+	<!--  
+		
+		# 동적 SQL
+
+		- 마이바티스의 가장 강력한 기능 중 하나는 동적 SQL을 처리하는 방법이다. 
+		- JSTL과 같이 <if> <when> <otherwise>를 사용하여 쿼리를 동적으로 사용할 수 있다. 
+		- 공백이나 콤마를 붙이는 작업 , 제어문에 따라서 AND절과 OR절을 제어하기가 까다로울 수 있는데
+	      마이바티스의 <trim> , <where> , <set>을 사용하여 보다 편리하게 구현할 수 있다.
+	      
+		- '' , "" 모두 사용 가능하다. test 식은 '' 문자열 비교는 ""를 권장한다.  	
+			예시) 
+				<when test = '조건식'>
+				<when test = "조건식" >
+				 
+		- dao에서 전송된 단일 데이터 , pojo의 필드 , map프레임워크의 key값을 그대로 속성에 사용한다.
+			예시)
+			<if test='productCode != null '>
+			<if test='onePageViewCount != 0'>  
+			
+		- (자주 실수하는 부분1) 조건식에서 연산자 사용시 && || 대신에 and , or 를 사용해야 한다.
+		- (자주 실수하는 부분2) JSTL과 구문이 굉장히 비슷하여 JSTL형태로 Mybatis에서 작성하는 경우
+
+
+			예시)
+				       			 JSTL				    MyBatis 
+			표기법 		:    	${}				/	     #{}
+			if    		:  		<c:if>			/		 <if>
+			choose		:  		<c:choose>  	/	   <choose>
+			when		: 		<c:when>	 	/ 		 <when>
+			otherwise 	: 		<c:otherwise> 	/ 	   <otherwise>		
+			foreach		:		<c:forEach>		/	 	<foreach>
+	
+	-->
+	
+	<resultMap type="hashmap" id="orderMap">
+		<result column="MEMBER_ID" 				 property="memberId"/>
+		<result column="MEMBER_NAME" 			 property="memberName"/>
+		<result column="HP" 					 property="hp"/>
+		<result column="EMAIL" 					 property="email"/>
+		<result column="RESIDENCE" 				 property="residence"/>
+		<result column="PRODUCT_NAME" 			 property="productName"/>
+		<result column="PRODUCT_PRICE" 			 property="productPrice"/>
+		<result column="PRODUCT_DELIVERY_PRICE"  property="productDeliveryPrice"/>
+		<result column="ORDER_GOODS_QTY" 		 property="orderGoodsQty"/>
+		<result column="DELIVERY_STATE" 		 property="deliveryState"/>
+	</resultMap>
+	
+	<select id="list" resultMap="orderMap">
+		SELECT
+				M.MEMBER_ID   			 AS MEMBER_ID,
+		        M.MEMBER_NAME 			 AS MEMBER_NAME,
+		        M.HP	      			 AS HP,
+		        M.EMAIL		  			 AS EMAIL,
+		        M.RESIDENCE   			 AS RESIDENCE,
+		        P.PRODUCT_NAME 			 AS PRODUCT_NAME,
+		        P.PRODUCT_PRICE 		 AS PRODUCT_PRICE,
+		        P.PRODUCT_DELIVERY_PRICE AS PRODUCT_DELIVERY_PRICE,
+		        O.ORDER_GOODS_QTY		 AS ORDER_GOODS_QTY,
+		        O.DELIVERY_STATE		 AS DELIVERY_STATE
+		FROM
+				T_ORDER O
+				   JOIN T_PRODUCT P
+					 ON O.PRODUCT_CODE = P.PRODUCT_CODE
+				   JOIN T_MEMBER M
+					 ON O.MEMBER_ID = M.MEMBER_ID 
+	</select>
+
+</mapper>
