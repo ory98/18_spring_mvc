@@ -205,15 +205,39 @@
 			
 	-->
 	
-	<insert id="foreachEx01" parameterType="">
+	<insert id="foreachEx01" >
 		INSERT INTO 
 				T_PRODUCT 
 		VALUES 
-				<foreach collection="list" item="productDto" separator=",">
-					(#{productDto.productCode},#{productDto.productName},#{productDto.productPrice},#{productDto.productDeliveryPrice}) 
-				</foreach>
+			<foreach collection="list" item="productDto" separator=",">
+				(#{productDto.productCode} , #{productDto.productName} , #{productDto.productPrice} , #{productDto.productDeliveryPrice} )
+			</foreach>						  
 	</insert>
 	
+	<select id="foreachEx02" resultMap="orderMap">
+		SELECT
+				M.MEMBER_ID   			 AS MEMBER_ID,
+		        M.MEMBER_NAME 			 AS MEMBER_NAME,
+		        M.HP	      			 AS HP,
+		        M.EMAIL		  			 AS EMAIL,
+		        M.RESIDENCE   			 AS RESIDENCE,
+		        P.PRODUCT_NAME 			 AS PRODUCT_NAME,
+		        P.PRODUCT_PRICE 		 AS PRODUCT_PRICE,
+		        P.PRODUCT_DELIVERY_PRICE AS PRODUCT_DELIVERY_PRICE,
+		        O.ORDER_GOODS_QTY		 AS ORDER_GOODS_QTY,
+		        O.DELIVERY_STATE		 AS DELIVERY_STATE
+		FROM
+				T_ORDER O
+				   JOIN T_PRODUCT P
+					 ON O.PRODUCT_CODE = P.PRODUCT_CODE
+				   JOIN T_MEMBER M
+					 ON O.MEMBER_ID = M.MEMBER_ID 
+		WHERE
+				M.MEMBER_ID IN 
+				<foreach collection="array" item="memberId" open="(" separator="," close=")">
+					#{memberId}
+				</foreach>
+	</select>
 	<!-- 
 	
 		# <where>
