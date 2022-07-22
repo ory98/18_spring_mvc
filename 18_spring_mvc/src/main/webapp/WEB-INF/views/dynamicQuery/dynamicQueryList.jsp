@@ -48,8 +48,32 @@
 				<option value="deliveryState">배송상태</option>
 			</select>
 			<input type="text" name="searchWord">
-			<input type="submit" name="검색">
+			<input type="submit" value="검색">
 		</p>
 	</form>
+	
+	<form action="chooseEx01" method="get">
+		<p>
+			chooseEx01 Ex : <select name="searchKeyword">
+				<option value="all">전체</option>
+				<option value="memberId">회원아이디</option>
+				<option value="memberName">회원이름</option>
+				<option value="residence">거주지</option>
+				<option value="productName">상품이름</option>
+				<option value="deliveryState">배송상태</option>
+			</select>
+			<input type="text" name="searchWord">
+			<input type="submit" value="검색">
+		</p>
+	</form>
+	
+	<form action="chooseEx02" method="get">
+		<p>	
+			chooseEx02 : 완료된 배송 <input type="radio" name="deliveryState" value="배송완료">&emsp;
+			미완료된 배송 <input type="radio" name="deliveryState" value="미완료">&emsp;
+			<input type="submit" value="검색">
+		</p>
+	</form>
+	
 </body>
 </html>

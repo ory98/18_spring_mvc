@@ -35,18 +35,18 @@ public class DynamicQueryController {
 	}
 	
 	@RequestMapping(value="/chooseEx01" , method=RequestMethod.GET)
-	public ModelAndView chooseEx01() {
+	public ModelAndView chooseEx01(@RequestParam Map<String, String> searchMap) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("dynamicQuery/dynamicQueryList");
-		mv.addObject("orderMapList", "-");
+		mv.addObject("orderMapList", dynamicQueryDao.chooseEx01(searchMap));
 		return mv;
 	}
 	
 	@RequestMapping(value="/chooseEx02" , method=RequestMethod.GET)
-	public ModelAndView chooseEx02() {
+	public ModelAndView chooseEx02(@RequestParam("deliveryState") String deliveryState) { // (라디오)값이 하나일 경우 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("dynamicQuery/dynamicQueryList");
-		mv.addObject("orderMapList", "-");
+		mv.addObject("orderMapList", dynamicQueryDao.chooseEx02(deliveryState));
 		return mv;
 	}
 
