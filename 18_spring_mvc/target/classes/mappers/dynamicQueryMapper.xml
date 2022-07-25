@@ -238,6 +238,7 @@
 					#{memberId}
 				</foreach>
 	</select>
+	
 	<!-- 
 	
 		# <where>
@@ -246,6 +247,40 @@
 		- 앞 뒤에 필요한 구문들(AND, OR, WHERE)을 추가하거나 생략하는 역할을 한다.
 	
 	 -->
+	 
+	 <select id="whereEx" parameterType="OrderDto" resultType="OrderDto">
+	 	
+	 	<!-- 에러 발생 (WHERE절의 AND로 인해 에러 발생)-->
+		<!--  
+		SELECT
+				*
+		FROM
+				T_ORDER
+		WHERE 
+				<if test='memberId != null and memberId != ""'>
+					MEMBER_ID = #{memberId}
+				</if>
+				<if test='productCode != null and productCode != ""'>
+					AND PRODUCT_CODE = #{productCode}
+				</if>
+		-->
+	 
+	 <!-- 정상 동작 -->
+		SELECT
+				*
+		FROM
+				T_ORDER
+		<where>
+			<if test='memberId != null and memberId != ""'>
+				MEMBER_ID = #{memberId}
+			</if>
+			<if test='productCode != null and productCode != ""'>
+				AND PRODUCT_CODE = #{productCode}
+			</if>
+		</where> 
+		
+	</select>
+	 
 	
 	<!-- 
 	
@@ -255,5 +290,38 @@
 		- 앞 뒤에 필요없는 구문(,)을 생략하여 준다.
 	
 	 -->
+	 
+	 
+	 <update id="setEx" parameterType="ProductDto">
+	 
+	 <!-- 에러 발생 (set의에 , 때문에 에러가 발생)-->
+	 <!-- 
+	 UPDATE 
+	 		T_PRODUCT
+	 SET
+	 		<if test='productPrice != 0'>
+	 			PRODUCT_PRICE = #{productPrice},
+	 		</if>
+	 		<if test='productDeliveryPrice != 0'>
+		 		PRODUCT_DELIVERY_PRICE = #{productDeliveryPrice}
+	 		</if>
+	 WHERE
+	 		PRODUCT_CODE = #{productCode}
+	  -->
+	  
+	 UPDATE 
+	 		T_PRODUCT
+	 <set>
+ 		<if test='productPrice != 0'>
+ 			PRODUCT_PRICE = #{productPrice},
+ 		</if>
+ 		<if test='productDeliveryPrice != 0'>
+	 		PRODUCT_DELIVERY_PRICE = #{productDeliveryPrice}
+ 		</if>
+	 </set>
+	 WHERE
+	 		PRODUCT_CODE = #{productCode}
+	 
+	 </update>
 
 </mapper>

@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.mvc.dataTransfer.dto.OrderDto;
 import com.spring.mvc.dataTransfer.dto.ProductDto;
 
 @Repository
@@ -35,6 +36,12 @@ public class DynamicQueryDao {
 	}
 	public List<Map<String, Object>> foreachEx02(String[] memberIdList) { // 배열을 넘긴다.   
 		return sqlSession.selectList("dynamicQuery.foreachEx02" , memberIdList); 
+	}
+	public void whereEx(OrderDto orderDto) {
+		List<OrderDto> orderList = sqlSession.selectList("dynamicQuery.whereEx" , orderDto);
+	}
+	public void setEx(ProductDto productDto) {
+		sqlSession.update("dynamicQuery.setEx" , productDto);
 	}
 	
 }

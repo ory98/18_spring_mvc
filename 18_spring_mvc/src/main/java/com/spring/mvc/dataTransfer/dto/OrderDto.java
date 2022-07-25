@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class OrderDto {
 	
 	private String orderCode;
-	private String memberID;
+	private String memberId;
 	private String productCode;
 	private int orderGoodsQty;
 	private String deliveryMessage;
@@ -21,11 +21,11 @@ public class OrderDto {
 	public void setOrderCode(String orderCode) {
 		this.orderCode = orderCode;
 	}
-	public String getMemberID() {
-		return memberID;
+	public String getMemberId() {
+		return memberId;
 	}
-	public void setMemberID(String memberID) {
-		this.memberID = memberID;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 	public String getProductCode() {
 		return productCode;
@@ -60,7 +60,7 @@ public class OrderDto {
 	
 	@Override
 	public String toString() {
-		return "OrderDto [orderCode=" + orderCode + ", memberID=" + memberID + ", productCode=" + productCode
+		return "OrderDto [orderCode=" + orderCode + ", memberId=" + memberId + ", productCode=" + productCode
 				+ ", orderGoodsQty=" + orderGoodsQty + ", deliveryMessage=" + deliveryMessage + ", deliveryState="
 				+ deliveryState + ", orderDate=" + orderDate + "]";
 	}
